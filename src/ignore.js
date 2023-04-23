@@ -23,8 +23,12 @@ class Ignore {
     if (!this.active) { return false; }
     // This takes the path of a single item, and checks if it's within it's paths.
     for (const p of this.paths) {
-      if (minimatch(item, p)) {
-        return true;
+      if (minimatch(item, p.replace(/\./, "\."))) {
+        if (p.startsWith("!")) {
+          return false;
+        } else {
+          return true;
+        }
       }
     }
     return false;
@@ -74,8 +78,53 @@ class GCloudIgnore extends Ignore {
   }
 }
 
+class NPMIgnore extends Ignore {
+  constructor() {
+    super();
+  }
+
+  findPaths() {
+    this.paths = parseIgnore(this.file, {
+      defaults: [
+        ".*.swp",
+        "._*",
+        ".DS_STORE",
+        ".git",
+        ".gitignore",
+        ".hg",
+        ".npmignore",
+        ".npmrc",
+        ".lock-wscript",
+        ".svn",
+        ".wafpickle-*",
+        "config.gypi",
+        "CVS",
+        "npm-debug.log",
+        "node_modules/",
+        "!package.json",
+        "!README",
+        "!README.md",
+        "!readme",
+        "!readme.md",
+        "!CHANGELOG",
+        "!CHANGELOG.md",
+        "!changelog",
+        "!changelog.md",
+        "!LICENSE",
+        "!LICENSE.md",
+        "!LICENCE",
+        "!LICENCE.md",
+        "!license.md",
+        "!license",
+        "!licence"
+      ]
+    });
+  }
+}
+
 module.exports = {
   Ignore,
   GitIgnore,
   GCloudIgnore,
+  NPMIgnore,
 };

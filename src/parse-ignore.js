@@ -23,6 +23,9 @@
     }
   });
 
+  Additionally a `defaults` key can be included into `opts` that will supply the
+  default starting lines into the output.
+
     - `line`: Is the value of the current line
     - `lines`: Is the value of all lines that need to be parsed
 */
@@ -33,7 +36,7 @@ const split = str => String(str).split(/\r\n?|\n/);
 
 function parse(input, opts = {}) {
   let lines = split(input);
-  let output = [];
+  let output = opts.defaults ?? [];
 
   for (line of lines) {
     let val = line.trim();

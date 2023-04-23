@@ -6,7 +6,8 @@ const path = require("path");
 let projectPath, treeViewProject, treeView, ui, subscriptions;
 let supported = {
   gitignore: new ignore.GitIgnore(),
-  gcloudignore: new ignore.GCloudIgnore()
+  gcloudignore: new ignore.GCloudIgnore(),
+  npmignore: new ignore.NPMIgnore()
 };
 
 function consumeTreeView(localTreeView) {
@@ -50,6 +51,27 @@ function updateTree(opt) {
   cleanIgnore(paths);
 
   switch(opt) {
+    case ".npmignore":
+      for (item of paths) {
+        let entry = treeView.entryForPath(item.path);
+        let loc = item.path.replace(`${projectPath}${path.sep}`, "");
+        if (entry.getAttribute("is") === "tree-view-directory") {
+          loc += "/";
+        }
+
+        if (supported.npmignore.active && supported.npmignore.shouldIgnore(loc)) {
+          entry.classList.add("status-ignored");
+
+          if (entry.getAttribute("is") === "tree-view-directory") {
+            let children = entry.querySelectorAll(".file");
+            for (child of children) {
+              child.classList.add("status-ignored");
+            }
+          }
+        }
+      }
+      break;
+
     case ".gcloudignore":
       for (item of paths) {
         let entry = treeView.entryForPath(item.path);
@@ -148,6 +170,16 @@ function scanForIgnores() {
     gcloudignore.value = ".gcloudignore";
 
     ui.appendChild(gcloudignore);
+  }
+
+  supported.npmignore.enable(path.join(projectPath, ".npmignore"));
+
+  if (supported.npmignore.active) {
+    let npmignore = document.createElement("option");
+    npmignore.text = ".npmignore",
+    npmignore.value = ".npmignore";
+
+    ui.appendChild(npmignore);
   }
 }
 
