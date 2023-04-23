@@ -1,0 +1,25 @@
+{
+  "name": "tree-view-ignores",
+  "version": "1.0.0",
+  "description": "Show more than just `.gitignore` on the Pulsar `tree-view`",
+  "main": "src/tree-view-ignores.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "confused-Techie",
+  "license": "MIT",
+  "engines": {
+    "atom": "*"
+  },
+  "consumedServices": {
+    "tree-view": {
+      "versions": {
+        "^1.0.0": "consumeTreeView"
+      }
+    }
+  },
+  "dependencies": {
+    "minimatch": "^9.0.0"
+  }
+}
