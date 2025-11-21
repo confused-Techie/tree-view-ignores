@@ -50,77 +50,40 @@ function updateTree(opt) {
   // Lets first remove all instances of ignore
   cleanIgnore(paths);
 
-  switch(opt) {
-    case ".npmignore":
-      for (item of paths) {
-        let entry = treeView.entryForPath(item.path);
-        let loc = item.path.replace(`${projectPath}${path.sep}`, "");
-        if (entry.getAttribute("is") === "tree-view-directory") {
-          loc += "/";
-        }
+  let ignore;
 
-        if (supported.npmignore.active && supported.npmignore.shouldIgnore(loc)) {
-          entry.classList.add("status-ignored");
+  for (const ignoreType in supported) {
+    if (supported[ignoreType].name === opt) {
+      ignore = supported[ignoreType];
+    }
+  }
 
-          if (entry.getAttribute("is") === "tree-view-directory") {
-            let children = entry.querySelectorAll(".file");
-            for (child of children) {
-              child.classList.add("status-ignored");
-            }
-          }
-        }
-      }
-      break;
+  if (!ignore) {
+    console.log(`Unable to update tree for unknown ignore type: '${opt}'`);
+    return;
+  }
 
-    case ".gcloudignore":
-      for (item of paths) {
-        let entry = treeView.entryForPath(item.path);
-        let loc = item.path.replace(`${projectPath}${path.sep}`, "");
-        if (entry.getAttribute("is") === "tree-view-directory") {
-          // This would indicate we are working with a directory
-          // and minimatch needs us to add the path separator to recognize
-          // minimatch only uses `/` so we don't care about OS here
-          loc += "/";
-        }
+  for (item of paths) {
+    let entry = treeView.entryForPath(item.path);
+    let loc = item.path.replace(`${projectPath}${path.sep}`, "");
+    if (entry.getAttribute("is") === "tree-view-directory") {
+      // This would indicate we are working with a directory
+      // and minimatch needs us to add the path separator to recognize
+      // minimatch only uses `/` so we don't care about OS here
+      loc += "/";
+    }
 
-        if (supported.gcloudignore.active && supported.gcloudignore.shouldIgnore(loc)) {
-          entry.classList.add("status-ignored");
+    if (ignore.active && ignore.shouldIgnore(loc)) {
+      entry.classList.add("status-ignored");
 
-          // Now we want to make sure to ignore children too
-          if (entry.getAttribute("is") === "tree-view-directory") {
-            let children = entry.querySelectorAll(".file");
-            for (child of children) {
-              child.classList.add("status-ignored");
-            }
-          }
+      // Now we want to make sure to ignore children too
+      if (entry.getAttribute("is") === "tree-view-directory") {
+        let children = entry.querySelectorAll(".file");
+        for (child of children) {
+          child.classList.add("status-ignored");
         }
       }
-      break;
-
-    case ".gitignore":
-      for (item of paths) {
-        let entry = treeView.entryForPath(item.path);
-        entry.classList.remove("status-ignored");
-        let loc = item.path.replace(`${projectPath}${path.sep}`, "");
-        if (entry.getAttribute("is") === "tree-view-directory") {
-          loc += "/";
-        }
-
-        if (supported.gitignore.active && supported.gitignore.shouldIgnore(loc)) {
-          entry.classList.add("status-ignored");
-
-          // Then apply to all children
-          if (entry.getAttribute("is") === "tree-view-directory") {
-            let children = entry.querySelectorAll(".file");
-            for (child of children) {
-              child.classList.add("status-ignored");
-            }
-          }
-        }
-      }
-      break;
-    default:
-      break;
+    }
   }
 
   return;
