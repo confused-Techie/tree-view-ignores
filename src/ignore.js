@@ -10,10 +10,10 @@ class Ignore {
     this.paths;
   }
 
-  enable(path) {
-    if (fs.existsSync(path)) {
+  enable(ignoreFilePath) {
+    if (fs.existsSync(ignoreFilePath)) {
       // The file has been found
-      this.file = fs.readFileSync(path);
+      this.file = fs.readFileSync(ignoreFilePath);
       this.active = true;
       this.findPaths();
     }
