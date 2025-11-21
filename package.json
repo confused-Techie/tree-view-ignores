@@ -1,6 +1,6 @@
 {
   "name": "tree-view-ignores",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Show more than just `.gitignore` on the Pulsar `tree-view`",
   "main": "src/tree-view-ignores.js",
   "scripts": {
