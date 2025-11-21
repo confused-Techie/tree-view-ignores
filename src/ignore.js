@@ -8,6 +8,7 @@ class Ignore {
     this.active = false;
     this.file;
     this.paths;
+    this.name;
   }
 
   enable(ignoreFilePath) {
@@ -39,6 +40,7 @@ class Ignore {
 class GitIgnore extends Ignore {
   constructor() {
     super();
+    this.name = ".gitignore";
   }
 
   findPaths() {
@@ -49,6 +51,7 @@ class GitIgnore extends Ignore {
 class GCloudIgnore extends Ignore {
   constructor() {
     super();
+    this.name = ".gcloudignore";
   }
 
   findPaths() {
@@ -81,6 +84,7 @@ class GCloudIgnore extends Ignore {
 class NPMIgnore extends Ignore {
   constructor() {
     super();
+    this.name = ".npmignore";
   }
 
   findPaths() {

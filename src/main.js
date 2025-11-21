@@ -152,34 +152,17 @@ function scanForIgnores() {
     projectPath = atom.project.getPaths()[0];
   }
 
-  supported.gitignore.enable(path.join(projectPath, ".gitignore"));
+  for (const ignoreType in supported) {
+    let ignore = supported[ignoreType];
+    ignore.enable(path.join(projectPath, ignore.name));
 
-  if (supported.gitignore.active) {
-    let gitignore = document.createElement("option");
-    gitignore.text = ".gitignore";
-    gitignore.value = ".gitignore";
+    if (ignore.active) {
+      let ele = document.createElement("option");
+      ele.text = ignore.name;
+      ele.value = ignore.name;
 
-    ui.appendChild(gitignore);
-  }
-
-  supported.gcloudignore.enable(path.join(projectPath, ".gcloudignore"));
-
-  if (supported.gcloudignore.active) {
-    let gcloudignore = document.createElement("option");
-    gcloudignore.text = ".gcloudignore";
-    gcloudignore.value = ".gcloudignore";
-
-    ui.appendChild(gcloudignore);
-  }
-
-  supported.npmignore.enable(path.join(projectPath, ".npmignore"));
-
-  if (supported.npmignore.active) {
-    let npmignore = document.createElement("option");
-    npmignore.text = ".npmignore",
-    npmignore.value = ".npmignore";
-
-    ui.appendChild(npmignore);
+      ui.appendChild(ele);
+    }
   }
 }
 
