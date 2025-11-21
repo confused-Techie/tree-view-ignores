@@ -126,9 +126,60 @@ class NPMIgnore extends Ignore {
   }
 }
 
+class DockerIgnore extends Ignore {
+  constructor() {
+    super();
+    this.name = ".dockerignore";
+  }
+
+  findPaths() {
+    this.paths = parseIgnore(this.file);
+  }
+}
+
+class EslintIgnore extends Ignore {
+  constructor() {
+    super();
+    this.name = ".eslintignore";
+  }
+
+  findPaths() {
+    this.paths = parseIgnore(this.file, {
+      defaults: [
+        "node_modules/",
+        ".*/",
+        "!.eslintrc.*"
+      ]
+    });
+  }
+}
+
+class PrettierIgnore extends Ignore {
+  constructor() {
+    super();
+    this.name = ".prettierignore";
+  }
+
+  findPaths() {
+    this.paths = parseIgnore(this.file, {
+      defaults: [
+        "**/.git",
+        "**/.svn",
+        "**/.hg",
+        "**/node_modules",
+        "**/.jj",
+        "**/.sl"
+      ]
+    });
+  }
+}
+
 module.exports = {
   Ignore,
   GitIgnore,
   GCloudIgnore,
   NPMIgnore,
+  DockerIgnore,
+  EslintIgnore,
+  PrettierIgnore,
 };

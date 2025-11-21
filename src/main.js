@@ -7,7 +7,10 @@ let projectPath, treeViewProject, treeView, ui, subscriptions;
 let supported = {
   gitignore: new ignore.GitIgnore(),
   gcloudignore: new ignore.GCloudIgnore(),
-  npmignore: new ignore.NPMIgnore()
+  npmignore: new ignore.NPMIgnore(),
+  dockerignore: new ignore.DockerIgnore(),
+  eslintignore: new ignore.EslintIgnore(),
+  prettierignore: new ignore.PrettierIgnore(),
 };
 
 function consumeTreeView(localTreeView) {
