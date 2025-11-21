@@ -10,4 +10,7 @@ Currently `tree-view-ignores` supports the following formats and features:
 
 * `.gitignore`: Like `tree-view` will show any ignored files within the standard `.gitignore`
 * `.gcloudignore`: Even supports `#!include:` syntax, and will import whatever files are defined.
-* `.npmignore`: Supports the `.npmignore` file only, including the defaults applied by NPM
+* `.npmignore`: Supports the `.npmignore` file, including the defaults applied by NPM
+* `.dockerignore`: Supports `.dockerignore`
+* `.eslintignore`: Applying their defaults
+* `.prettierignore`: Applying their defaults and importing the `.gitignore`
