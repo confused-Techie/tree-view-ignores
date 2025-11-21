@@ -23,6 +23,11 @@
     }
   });
 
+  A function `beforeLines` can also be supplied, that runs before any lines have
+  been parsed, easily allowing importing other ignore files into the current one.
+  Such as for ignores that also respect the contents of `.gitignore`. The output
+  of this function is handled identically to `beforeLine`.
+  
   Additionally a `defaults` key can be included into `opts` that will supply the
   default starting lines into the output.
 
@@ -37,6 +42,22 @@ const split = str => String(str).split(/\r\n?|\n/);
 function parse(input, opts = {}) {
   let lines = split(input);
   let output = opts.defaults ?? [];
+
+  if (typeof opts.beforeLines === "function") {
+    let ls = opts.beforeLines();
+    if (typeof ls === "string") {
+      output.push(l);
+      continue;
+    }
+    if (typeof ls === "boolean" && ls === false) {
+      continue;
+    }
+    if (Array.isArray(ls)) {
+      for (const item of ls) {
+        lines.push(item);
+      }
+    }
+  }
 
   for (line of lines) {
     let val = line.trim();

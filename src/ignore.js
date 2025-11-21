@@ -169,7 +169,13 @@ class PrettierIgnore extends Ignore {
         "**/node_modules",
         "**/.jj",
         "**/.sl"
-      ]
+      ],
+      beforeLines: () => {
+        if (fs.existsSync(path.join(atom.project.getPaths()[0], ".gitignore"))) {
+          const importIgnore = fs.readFileSync(path.join(atom.project.getPaths()[0], ".gitignore"), { encoding: "utf8" });
+          return parseIgnore(importIgnore);
+        }
+      }
     });
   }
 }
